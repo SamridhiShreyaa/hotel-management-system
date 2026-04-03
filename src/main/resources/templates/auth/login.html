@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Guest Login</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #ffffff; margin: 24px;">
+<h1>Guest Login</h1>
+
+<p th:if="${message}" th:text="${message}" style="color: #0b6b2f;"></p>
+
+<form th:action="@{/auth/login}" th:object="${loginRequest}" method="post">
+	<div>
+		<label>Email:</label>
+		<input type="email" th:field="*{email}" required>
+	</div>
+	<br>
+	<div>
+		<label>Password:</label>
+		<input type="password" th:field="*{password}" required>
+	</div>
+	<br>
+	<button type="submit">Login</button>
+</form>
+
+<p>New user? <a th:href="@{/auth/register}">Register here</a></p>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Room Search</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #ffffff; margin: 24px;">
+<h1>Search Available Rooms</h1>
+
+<form th:action="@{/auth/room-search}" th:object="${roomSearchRequest}" method="post">
+	<div>
+		<label>City (optional):</label>
+		<input type="text" th:field="*{city}" placeholder="Bengaluru">
+	</div>
+	<br>
+	<div>
+		<label>Check-in Date:</label>
+		<input type="date" th:field="*{checkInDate}">
+	</div>
+	<br>
+	<div>
+		<label>Check-out Date:</label>
+		<input type="date" th:field="*{checkOutDate}">
+	</div>
+	<br>
+	<div>
+		<label>Guests:</label>
+		<input type="number" min="1" th:field="*{guests}" value="1">
+	</div>
+	<br>
+	<button type="submit">Search</button>
+</form>
+
+<h2>Available Results</h2>
+<table border="1" cellpadding="8" cellspacing="0">
+	<thead>
+	<tr>
+		<th>Hotel</th>
+		<th>Room No.</th>
+		<th>Type</th>
+		<th>Price/Night</th>
+		<th>Max Occupancy</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr th:each="room : ${results}">
+		<td th:text="${room.hotelName}"></td>
+		<td th:text="${room.roomNumber}"></td>
+		<td th:text="${room.roomType}"></td>
+		<td th:text="${room.pricePerNight}"></td>
+		<td th:text="${room.maxOccupancy}"></td>
+	</tr>
+	</tbody>
+</table>
+</body>
+</html>
