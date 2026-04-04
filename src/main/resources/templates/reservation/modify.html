@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Modify Reservation</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #ffffff; margin: 24px;">
+<h1>Modify Reservation</h1>
+
+<form th:action="@{'/reservations/modify/' + ${reservationId}}" th:object="${modifyRequest}" method="post">
+	<div><label>New Check-in:</label> <input type="date" th:field="*{checkInDate}"></div>
+	<br>
+	<div><label>New Check-out:</label> <input type="date" th:field="*{checkOutDate}"></div>
+	<br>
+	<div><label>Guests:</label> <input type="number" min="1" th:field="*{numGuests}"></div>
+	<br>
+	<div><label>Special Requests:</label> <input type="text" th:field="*{specialRequests}"></div>
+	<br>
+	<button type="submit">Save Changes</button>
+</form>
+</body>
+</html>

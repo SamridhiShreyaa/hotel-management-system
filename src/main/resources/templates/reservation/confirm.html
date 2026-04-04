@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Reservation Confirmed</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #ffffff; margin: 24px;">
+<h1>Reservation Confirmed</h1>
+
+<div th:if="${reservation != null}">
+	<p><strong>ID:</strong> <span th:text="${reservation.reservationId}"></span></p>
+	<p><strong>Status:</strong> <span th:text="${reservation.status}"></span></p>
+	<p><strong>Amount:</strong> <span th:text="${reservation.totalAmount}"></span></p>
+	<p><strong>Message:</strong> <span th:text="${reservation.message}"></span></p>
+</div>
+
+<p><a th:href="@{/reservations}">View reservation history</a></p>
+</body>
+</html>
