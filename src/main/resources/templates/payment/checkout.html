@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Payment Checkout</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #ffffff; margin: 24px;">
+<h1>Payment Checkout</h1>
+
+<form th:action="@{/payment/checkout}" th:object="${paymentRequest}" method="post">
+	<div>
+		<label>Reservation ID:</label>
+		<input type="number" min="1" th:field="*{reservationId}" required>
+	</div>
+	<br>
+	<div>
+		<label>Amount:</label>
+		<input type="number" step="0.01" min="0.01" th:field="*{amount}" required>
+	</div>
+	<br>
+	<div>
+		<label>Payment Method:</label>
+		<select th:field="*{paymentMethod}" required>
+			<option value="">Select method</option>
+			<option th:each="method : ${methods}" th:value="${method}" th:text="${method}"></option>
+		</select>
+	</div>
+	<br>
+	<button type="submit">Pay Now</button>
+</form>
+</body>
+</html>
