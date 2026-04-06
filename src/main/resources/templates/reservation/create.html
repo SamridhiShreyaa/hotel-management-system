@@ -9,21 +9,24 @@
 <h1>Create Reservation</h1>
 
 <p th:if="${param.error}" th:text="${param.error}" style="color: #9a1b1b;"></p>
+<p th:if="${error}" th:text="${error}" style="color: #9a1b1b;"></p>
 
 <form th:action="@{/reservations/create}" th:object="${reservationRequest}" method="post">
 	<div><label>Guest ID:</label> <input type="number" th:field="*{guestId}" required></div>
 	<br>
 	<div><label>Room ID:</label> <input type="number" th:field="*{roomId}" required></div>
 	<br>
-	<div><label>Check-in:</label> <input type="date" th:field="*{checkInDate}" required></div>
+	<div><label>Check-in:</label> <input type="date" th:field="*{checkInDate}" th:attr="max=${today}" required></div>
 	<br>
-	<div><label>Check-out:</label> <input type="date" th:field="*{checkOutDate}" required></div>
+	<div><label>Check-out:</label> <input type="date" th:field="*{checkOutDate}" th:attr="max=${today}" required></div>
 	<br>
 	<div><label>Guests:</label> <input type="number" min="1" th:field="*{numGuests}" value="1"></div>
 	<br>
 	<div><label>Special Requests:</label> <input type="text" th:field="*{specialRequests}"></div>
 	<br>
-	<button type="submit">Confirm Reservation</button>
+	<button type="submit">Continue to Payment</button>
 </form>
+
+<p><a th:href="@{/auth/room-search}">Back to room search</a></p>
 </body>
 </html>

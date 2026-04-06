@@ -28,7 +28,7 @@ public class ReservationServiceImpl implements ReservationService {
 		if (!isDateRangeValid(request.getCheckInDate(), request.getCheckOutDate())) {
 			return ReservationBuilder.builder()
 					.status("PENDING")
-					.message("Check-out date must be after check-in date.")
+					.message("Booking dates must be today or earlier, and check-out must be after check-in.")
 					.build();
 		}
 
@@ -44,12 +44,40 @@ public class ReservationServiceImpl implements ReservationService {
 				.numGuests(guests)
 				.specialRequests(request.getSpecialRequests())
 				.totalAmount(calculateTotal(request.getCheckInDate(), request.getCheckOutDate()))
-				.status("CONFIRMED")
-				.message("Reservation created successfully.")
+				.status("PENDING")
+				.message("Reservation created. Proceed to payment.")
 				.build();
 
 		reservations.put(reservationId, response);
 		return response;
+	}
+
+	@Override
+	public ReservationResponse confirmReservation(Long reservationId) {
+		ReservationResponse existing = reservations.get(reservationId);
+		if (existing == null) {
+			return ReservationBuilder.builder()
+					.reservationId(reservationId)
+					.status("PENDING")
+					.message("Reservation not found.")
+					.build();
+		}
+
+		ReservationResponse confirmed = ReservationBuilder.builder()
+				.reservationId(existing.getReservationId())
+				.guestId(existing.getGuestId())
+				.roomId(existing.getRoomId())
+				.checkInDate(existing.getCheckInDate())
+				.checkOutDate(existing.getCheckOutDate())
+				.numGuests(existing.getNumGuests())
+				.specialRequests(existing.getSpecialRequests())
+				.totalAmount(existing.getTotalAmount())
+				.status("CONFIRMED")
+				.message("Reservation confirmed after payment.")
+				.build();
+
+		reservations.put(reservationId, confirmed);
+		return confirmed;
 	}
 
 	@Override
@@ -134,7 +162,11 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 
 	private boolean isDateRangeValid(LocalDate checkInDate, LocalDate checkOutDate) {
-		return checkInDate != null && checkOutDate != null && checkOutDate.isAfter(checkInDate);
+		LocalDate today = LocalDate.now();
+		return checkInDate != null && checkOutDate != null
+				&& !checkInDate.isAfter(today)
+				&& !checkOutDate.isAfter(today)
+				&& checkOutDate.isAfter(checkInDate);
 	}
 
 	private BigDecimal calculateTotal(LocalDate checkInDate, LocalDate checkOutDate) {

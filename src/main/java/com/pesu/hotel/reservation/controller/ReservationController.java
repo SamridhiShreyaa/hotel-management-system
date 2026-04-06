@@ -1,5 +1,9 @@
 package com.pesu.hotel.reservation.controller;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,18 +36,63 @@ public class ReservationController {
 	}
 
 	@GetMapping("/create")
-	public String showCreate(Model model) {
-		model.addAttribute("reservationRequest", new ReservationRequest());
+	public String showCreate(@RequestParam(required = false) Long guestId,
+							@RequestParam(required = false) Long roomId,
+							@RequestParam(required = false) String checkInDate,
+							@RequestParam(required = false) String checkOutDate,
+							@RequestParam(required = false) Integer numGuests,
+							Model model) {
+		ReservationRequest reservationRequest = new ReservationRequest();
+		reservationRequest.setGuestId(guestId);
+		reservationRequest.setRoomId(roomId);
+		try {
+			if (checkInDate != null && !checkInDate.isBlank()) {
+				reservationRequest.setCheckInDate(java.time.LocalDate.parse(checkInDate));
+			}
+			if (checkOutDate != null && !checkOutDate.isBlank()) {
+				reservationRequest.setCheckOutDate(java.time.LocalDate.parse(checkOutDate));
+			}
+		} catch (java.time.format.DateTimeParseException ex) {
+			model.addAttribute("error", "Invalid date format. Please select valid dates.");
+		}
+		if (reservationRequest.getCheckInDate() == null) {
+			reservationRequest.setCheckInDate(LocalDate.now().minusDays(1));
+		}
+		if (reservationRequest.getCheckOutDate() == null) {
+			reservationRequest.setCheckOutDate(LocalDate.now());
+		}
+		reservationRequest.setNumGuests(numGuests);
+		model.addAttribute("reservationRequest", reservationRequest);
+		model.addAttribute("today", LocalDate.now());
 		return "reservation/create";
 	}
 
 	@PostMapping("/create")
-	public String createReservation(@ModelAttribute ReservationRequest reservationRequest) {
+	public String createReservation(@ModelAttribute ReservationRequest reservationRequest, Model model) {
+		if (!isValidReservationDates(reservationRequest.getCheckInDate(), reservationRequest.getCheckOutDate())) {
+			model.addAttribute("error", "Booking dates must be today or earlier, and check-out must be after check-in.");
+			model.addAttribute("reservationRequest", reservationRequest);
+			model.addAttribute("today", LocalDate.now());
+			return "reservation/create";
+		}
+
 		ReservationResponse response = reservationService.createReservation(reservationRequest);
 		if (response.getReservationId() == null) {
-			return "redirect:/reservations/create?error=" + response.getMessage();
+			String encodedError = URLEncoder.encode(response.getMessage(), StandardCharsets.UTF_8);
+			return "redirect:/reservations/create?error=" + encodedError;
 		}
-		return "redirect:/reservations/confirm/" + response.getReservationId();
+		return "redirect:/payment/checkout?reservationId=" + response.getReservationId() + "&amount=" + response.getTotalAmount();
+	}
+
+	private boolean isValidReservationDates(LocalDate checkInDate, LocalDate checkOutDate) {
+		if (checkInDate == null || checkOutDate == null) {
+			return false;
+		}
+		LocalDate today = LocalDate.now();
+		if (checkInDate.isAfter(today) || checkOutDate.isAfter(today)) {
+			return false;
+		}
+		return checkOutDate.isAfter(checkInDate);
 	}
 
 	@GetMapping("/confirm/{reservationId}")

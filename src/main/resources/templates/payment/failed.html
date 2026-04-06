@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Payment Failed</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #ffffff; margin: 24px;">
+<h1>Payment Failed</h1>
+
+<div th:if="${paymentResponse != null}">
+	<p><strong>Status:</strong> <span th:text="${paymentResponse.paymentStatus}"></span></p>
+	<p><strong>Transaction Ref:</strong> <span th:text="${paymentResponse.transactionReference}"></span></p>
+	<p><strong>Message:</strong> <span th:text="${paymentResponse.message}"></span></p>
+</div>
+
+<p><a th:href="@{/payment/checkout(reservationId=${reservationId})}">Retry payment</a></p>
+<p><a th:href="@{/reservations}">Back to reservations</a></p>
+</body>
+</html>

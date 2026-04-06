@@ -1,6 +1,7 @@
 package com.pesu.hotel.payment.controller;
 
 import java.util.List;
+import java.math.BigDecimal;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,8 +25,13 @@ public class PaymentController {
 	}
 
 	@GetMapping("/checkout")
-	public String showCheckout(Model model) {
-		model.addAttribute("paymentRequest", new PaymentRequest());
+	public String showCheckout(@org.springframework.web.bind.annotation.RequestParam(required = false) Long reservationId,
+							@org.springframework.web.bind.annotation.RequestParam(required = false) BigDecimal amount,
+							Model model) {
+			PaymentRequest paymentRequest = new PaymentRequest();
+			paymentRequest.setReservationId(reservationId);
+			paymentRequest.setAmount(amount);
+			model.addAttribute("paymentRequest", paymentRequest);
 		model.addAttribute("methods", List.of("CREDIT_CARD", "DEBIT_CARD", "UPI", "NET_BANKING", "CASH"));
 		return "payment/checkout";
 	}
@@ -34,6 +40,10 @@ public class PaymentController {
 	public String process(@ModelAttribute PaymentRequest paymentRequest, Model model) {
 		PaymentResponse response = paymentService.processPayment(paymentRequest);
 		model.addAttribute("paymentResponse", response);
+		model.addAttribute("reservationId", paymentRequest.getReservationId());
+		if (!response.isSuccess()) {
+			return "payment/failed";
+		}
 		return "payment/success";
 	}
 

@@ -14,9 +14,9 @@ public class RoomSearchService {
 
 	public List<RoomSearchResult> searchAvailableRooms(RoomSearchRequest request) {
 		List<RoomSearchResult> allRooms = List.of(
-				new RoomSearchResult("The Grand Palace", "101", "SINGLE", new BigDecimal("2500.00"), 1),
-				new RoomSearchResult("The Grand Palace", "102", "DOUBLE", new BigDecimal("4500.00"), 2),
-				new RoomSearchResult("City Comfort Inn", "201", "DELUXE", new BigDecimal("3200.00"), 2));
+				new RoomSearchResult(101L, "The Grand Palace", "101", "SINGLE", new BigDecimal("2500.00"), 1),
+				new RoomSearchResult(102L, "The Grand Palace", "102", "DOUBLE", new BigDecimal("4500.00"), 2),
+				new RoomSearchResult(201L, "City Comfort Inn", "201", "DELUXE", new BigDecimal("3200.00"), 2));
 
 		int requiredGuests = request.getGuests() == null ? 1 : request.getGuests();
 		String requestedCity = request.getCity() == null ? "" : request.getCity().trim().toLowerCase();

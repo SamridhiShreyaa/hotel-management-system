@@ -8,6 +8,8 @@
 <body style="font-family: Arial, sans-serif; background: #ffffff; margin: 24px;">
 <h1>Search Available Rooms</h1>
 
+<p th:if="${error}" th:text="${error}" style="color: #9a1b1b;"></p>
+
 <form th:action="@{/auth/room-search}" th:object="${roomSearchRequest}" method="post">
 	<div>
 		<label>City (optional):</label>
@@ -16,12 +18,12 @@
 	<br>
 	<div>
 		<label>Check-in Date:</label>
-		<input type="date" th:field="*{checkInDate}">
+		<input type="date" th:field="*{checkInDate}" th:attr="max=${today}" required>
 	</div>
 	<br>
 	<div>
 		<label>Check-out Date:</label>
-		<input type="date" th:field="*{checkOutDate}">
+		<input type="date" th:field="*{checkOutDate}" th:attr="max=${today}" required>
 	</div>
 	<br>
 	<div>
@@ -33,6 +35,7 @@
 </form>
 
 <h2>Available Results</h2>
+<p th:if="${#lists.isEmpty(results)}" style="color: #666666;">No rooms found for selected criteria.</p>
 <table border="1" cellpadding="8" cellspacing="0">
 	<thead>
 	<tr>
@@ -41,6 +44,7 @@
 		<th>Type</th>
 		<th>Price/Night</th>
 		<th>Max Occupancy</th>
+		<th>Action</th>
 	</tr>
 	</thead>
 	<tbody>
@@ -50,6 +54,9 @@
 		<td th:text="${room.roomType}"></td>
 		<td th:text="${room.pricePerNight}"></td>
 		<td th:text="${room.maxOccupancy}"></td>
+		<td>
+			<a th:href="@{/reservations/create(roomId=${room.roomId}, checkInDate=${roomSearchRequest.checkInDate}, checkOutDate=${roomSearchRequest.checkOutDate}, numGuests=${roomSearchRequest.guests})}">Book now</a>
+		</td>
 	</tr>
 	</tbody>
 </table>

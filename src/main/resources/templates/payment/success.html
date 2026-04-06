@@ -13,6 +13,7 @@
 	<p><strong>Status:</strong> <span th:text="${paymentResponse.paymentStatus}"></span></p>
 	<p><strong>Transaction Ref:</strong> <span th:text="${paymentResponse.transactionReference}"></span></p>
 	<p><strong>Message:</strong> <span th:text="${paymentResponse.message}"></span></p>
+	<p th:if="${reservationId != null}"><a th:href="@{/reservations/confirm/{id}(id=${reservationId})}">View booking confirmation</a></p>
 </div>
 
 <h2>Payment Logs</h2>

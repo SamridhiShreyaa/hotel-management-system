@@ -6,6 +6,7 @@ public class PaymentRequest {
 	private Long reservationId;
 	private BigDecimal amount;
 	private String paymentMethod;
+	private String transactionReference;
 
 	public Long getReservationId() {
 		return reservationId;
@@ -29,5 +30,13 @@ public class PaymentRequest {
 
 	public void setPaymentMethod(String paymentMethod) {
 		this.paymentMethod = paymentMethod;
+	}
+
+	public String getTransactionReference() {
+		return transactionReference;
+	}
+
+	public void setTransactionReference(String transactionReference) {
+		this.transactionReference = transactionReference;
 	}
 }
