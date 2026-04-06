@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Payment Status</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #ffffff; margin: 24px;">
+<h1>Payment Status</h1>
+
+<div th:if="${paymentResponse != null}">
+	<p><strong>Success:</strong> <span th:text="${paymentResponse.success}"></span></p>
+	<p><strong>Status:</strong> <span th:text="${paymentResponse.paymentStatus}"></span></p>
+	<p><strong>Transaction Ref:</strong> <span th:text="${paymentResponse.transactionReference}"></span></p>
+	<p><strong>Message:</strong> <span th:text="${paymentResponse.message}"></span></p>
+</div>
+
+<h2>Payment Logs</h2>
+<table border="1" cellpadding="8" cellspacing="0">
+	<thead>
+	<tr>
+		<th>Status</th>
+		<th>Transaction Ref</th>
+		<th>Message</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr th:if="${logs == null || #lists.isEmpty(logs)}">
+		<td colspan="3">No logs available.</td>
+	</tr>
+	<tr th:each="entry : ${logs}">
+		<td th:text="${entry.paymentStatus}"></td>
+		<td th:text="${entry.transactionReference}"></td>
+		<td th:text="${entry.message}"></td>
+	</tr>
+	</tbody>
+</table>
+
+<p><a th:href="@{/payment/checkout}">Back to checkout</a></p>
+</body>
+</html>
