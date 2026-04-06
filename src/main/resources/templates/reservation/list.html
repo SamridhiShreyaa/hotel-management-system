@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Reservation History</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #ffffff; margin: 24px;">
+<h1>Reservation History</h1>
+
+<form th:action="@{/reservations}" method="get">
+	<label>Guest ID:</label>
+	<input type="number" name="guestId" th:value="${guestId}">
+	<button type="submit">Filter</button>
+	<a th:href="@{/reservations/create}">Create New Reservation</a>
+</form>
+
+<br>
+<table border="1" cellpadding="8" cellspacing="0">
+	<thead>
+	<tr>
+		<th>ID</th>
+		<th>Guest ID</th>
+		<th>Room ID</th>
+		<th>Check-in</th>
+		<th>Check-out</th>
+		<th>Status</th>
+		<th>Total Amount</th>
+		<th>Actions</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr th:each="reservation : ${reservations}">
+		<td th:text="${reservation.reservationId}"></td>
+		<td th:text="${reservation.guestId}"></td>
+		<td th:text="${reservation.roomId}"></td>
+		<td th:text="${reservation.checkInDate}"></td>
+		<td th:text="${reservation.checkOutDate}"></td>
+		<td th:text="${reservation.status}"></td>
+		<td th:text="${reservation.totalAmount}"></td>
+		<td>
+			<a th:href="@{'/reservations/modify/' + ${reservation.reservationId}}">Modify</a>
+			<form th:action="@{'/reservations/cancel/' + ${reservation.reservationId}}" method="post" style="display: inline;">
+				<button type="submit">Cancel</button>
+			</form>
+		</td>
+	</tr>
+	</tbody>
+</table>
+</body>
+</html>
