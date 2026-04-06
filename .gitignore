@@ -1,6 +1,7 @@
 target/
 .idea/
 .vscode/
+.tools/
 
 # Local environment config
 src/main/resources/application.properties

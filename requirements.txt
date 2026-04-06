@@ -1,0 +1,4 @@
+# Project setup requirements (environment prerequisites)
+Java 17+
+Maven 3.9+
+MySQL 8+
