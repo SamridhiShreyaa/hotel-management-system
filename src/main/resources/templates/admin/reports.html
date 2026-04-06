@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Reports</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #ffffff; margin: 24px;">
+<h1>Reports</h1>
+
+<table border="1" cellpadding="8" cellspacing="0">
+	<tr>
+		<th>Title</th><th>Occupied</th><th>Available</th><th>Revenue</th>
+	</tr>
+	<tr th:each="report : ${reports}">
+		<td th:text="${report.title}"></td>
+		<td th:text="${report.occupiedRooms}"></td>
+		<td th:text="${report.availableRooms}"></td>
+		<td th:text="${report.revenue}"></td>
+	</tr>
+</table>
+
+<p><a th:href="@{/admin/dashboard}">Back to dashboard</a></p>
+</body>
+</html>

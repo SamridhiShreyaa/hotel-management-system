@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin Dashboard</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #ffffff; margin: 24px;">
+<h1>Admin Dashboard</h1>
+
+<p>
+	<a th:href="@{/admin/rooms}">Rooms</a> |
+	<a th:href="@{/admin/reservations}">Reservations</a> |
+	<a th:href="@{/admin/reports}">Reports</a>
+</p>
+
+<h2>Rooms</h2>
+<table border="1" cellpadding="8" cellspacing="0">
+	<tr>
+		<th>Hotel</th><th>Room</th><th>Type</th><th>Status</th>
+	</tr>
+	<tr th:each="room : ${rooms}">
+		<td th:text="${room.hotelName}"></td>
+		<td th:text="${room.roomNumber}"></td>
+		<td th:text="${room.roomType}"></td>
+		<td th:text="${room.status}"></td>
+	</tr>
+</table>
+
+<h2>Reservations</h2>
+<ul>
+	<li th:each="reservation : ${reservations}" th:text="${reservation}"></li>
+</ul>
+
+<h2>Guests</h2>
+<ul>
+	<li th:each="guest : ${guests}" th:text="${guest}"></li>
+</ul>
+
+<h2>Reports</h2>
+<ul>
+	<li th:each="report : ${reports}">
+		<span th:text="${report.title}"></span> -
+		<span th:text="${report.occupiedRooms}"></span> occupied,
+		<span th:text="${report.availableRooms}"></span> available,
+		Revenue: <span th:text="${report.revenue}"></span>
+	</li>
+</ul>
+</body>
+</html>
