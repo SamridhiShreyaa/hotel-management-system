@@ -1,0 +1,170 @@
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+:root {
+  --primary:   #1a56db;
+  --primary-d: #1e429f;
+  --bg:        #f8f9fa;
+  --card-bg:   #ffffff;
+  --text:      #212529;
+  --muted:     #6c757d;
+  --radius:    12px;
+  --shadow:    0 2px 12px rgba(0,0,0,.08);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+/* ── Auth pages ───────────────────────────────────────────────────────────── */
+.auth-page {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f3460 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+
+.auth-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.auth-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(16px);
+  border-radius: 20px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  color: #e2e8f0;
+}
+
+.auth-logo {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.auth-card h2 {
+  text-align: center;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 0.25rem;
+}
+
+.auth-sub {
+  text-align: center;
+  color: #94a3b8;
+  margin-bottom: 1.75rem;
+}
+
+.auth-card .form-label   { color: #cbd5e1; font-size: 0.875rem; }
+.auth-card .form-control {
+  background: rgba(255,255,255,0.09);
+  border: 1px solid rgba(255,255,255,0.16);
+  color: #f1f5f9;
+  border-radius: 8px;
+}
+.auth-card .form-control:focus {
+  background: rgba(255,255,255,0.13);
+  border-color: #3b82f6;
+  color: #f1f5f9;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.25);
+}
+.auth-card .form-control::placeholder { color: #64748b; }
+.auth-card a { color: #60a5fa; }
+
+.demo-creds {
+  margin-top: 1.25rem;
+  background: rgba(255,255,255,0.07);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  text-align: center;
+}
+.demo-creds code {
+  background: rgba(255,255,255,0.12);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: #a5f3fc;
+}
+
+/* ── Stat cards ───────────────────────────────────────────────────────────── */
+.stat-card {
+  border: 1px solid #e9ecef;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+}
+.stat-icon   { font-size: 2rem; margin-bottom: 0.25rem; }
+.stat-value  { font-size: 1.75rem; font-weight: 700; color: var(--primary); }
+.stat-label  { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+
+/* ── Room cards ───────────────────────────────────────────────────────────── */
+.room-card {
+  border: 1px solid #e9ecef;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+.room-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.13);
+}
+.room-card-header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-d));
+  color: white;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.room-type-badge {
+  font-size: 0.75rem;
+  background: rgba(255,255,255,0.2);
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: .5px;
+}
+.room-number { font-weight: 700; font-size: 1.1rem; }
+.room-price  { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
+
+/* ── Payment options ──────────────────────────────────────────────────────── */
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+.payment-option:has(input:checked) {
+  border-color: var(--primary);
+  background: #eff6ff;
+}
+
+/* ── Tables ───────────────────────────────────────────────────────────────── */
+.table { border-radius: var(--radius); overflow: hidden; }
+.table thead th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: .5px; }
+
+/* ── Responsive tweaks ────────────────────────────────────────────────────── */
+@media (max-width: 576px) {
+  .auth-card { padding: 1.75rem; }
+  .stat-value { font-size: 1.4rem; }
+}

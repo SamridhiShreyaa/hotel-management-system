@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/head :: head('My Dashboard')}"></head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<div class="container py-4">
+
+  <!-- Alerts -->
+  <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+    <span th:text="${success}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+
+  <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+    <span th:text="${error}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+
+  <!-- Welcome -->
+  <h2 class="mb-1">
+    Welcome, 
+    <span th:text="${user.fullName != null ? user.fullName : user.username}"></span>! 👋
+  </h2>
+
+  <p class="text-muted mb-4">Manage your bookings and payments below.</p>
+
+  <!-- Stats -->
+  <div class="row g-3 mb-4">
+
+    <div class="col-sm-4">
+      <div class="card text-center p-3">
+        <div>🗓️</div>
+        <div th:text="${#lists.size(bookings)}">0</div>
+        <div>Total Bookings</div>
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="card text-center p-3">
+        <div>✅</div>
+        <div th:text="${activeBookings}">0</div>
+        <div>Active</div>
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="card text-center p-3">
+        <div>💳</div>
+        <div th:text="${#lists.size(payments)}">0</div>
+        <div>Payments</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Recent bookings -->
+  <h5 class="mb-3">Recent Bookings</h5>
+
+  <div th:if="${bookings.isEmpty()}" class="alert alert-info">
+    No bookings yet.
+  </div>
+
+  <div th:unless="${bookings.isEmpty()}">
+    <table class="table table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Room</th>
+          <th>Check-In</th>
+          <th>Check-Out</th>
+          <th>Amount</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr th:each="b : ${bookings}">
+          <td th:text="|#${b.id}|"></td>
+          <td th:text="${b.room.roomNumber}"></td>
+          <td th:text="${b.checkInDate}"></td>
+          <td th:text="${b.checkOutDate}"></td>
+          <td th:text="|₹${b.totalAmount}|"></td>
+
+          <td>
+            <span th:class="'badge ' + (b.status == 'BOOKED' ? 'bg-success' : (b.status == 'CANCELLED' ? 'bg-danger' : 'bg-secondary'))"
+                  th:text="${b.status}">
+            </span>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-5">
+    <h5 class="mb-3">Recent Payments</h5>
+    <div th:if="${payments.isEmpty()}" class="alert alert-info">
+      No payment history yet.
+    </div>
+    <div th:unless="${payments.isEmpty()}" class="table-responsive">
+      <table class="table table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>Payment ID</th>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>Date</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="p : ${payments}">
+            <td th:text="${p.id}"></td>
+            <td th:text="|₹${p.amount}|"></td>
+            <td th:text="${p.paymentMethod}"></td>
+            <td th:text="${p.paymentDate}"></td>
+            <td th:text="${p.logMessage}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
