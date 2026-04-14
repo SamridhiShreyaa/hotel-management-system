@@ -32,7 +32,7 @@ public class AdminController {
         model.addAttribute("totalRooms", roomService.countAll());
         model.addAttribute("availableRooms", roomService.countAvailable());
         model.addAttribute("totalBookings", bookingService.countAll());
-        model.addAttribute("activeBookings", bookingService.countBooked());
+        model.addAttribute("activeBookings", bookingService.countActive());
         model.addAttribute("totalGuests", userService.countGuests());
         model.addAttribute("totalRevenue", paymentService.totalRevenue());
         model.addAttribute("recentBookings", bookingService.findAll().stream().limit(5).toList());

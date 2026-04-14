@@ -38,6 +38,7 @@ public class UserController {
 
         model.addAttribute("user", user);
         model.addAttribute("bookings", bookingService.findByUser(user));
+        model.addAttribute("activeBookings", bookingService.countActiveForUser(user));
         model.addAttribute("payments", paymentService.findByUser(user));
 
         return "user/dashboard";

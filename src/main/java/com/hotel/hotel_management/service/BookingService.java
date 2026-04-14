@@ -119,6 +119,29 @@ public class BookingService {
         return bookingRepository.findById(id);
     }
 
+    public long countActive() {
+        LocalDate today = LocalDate.now();
+        return bookingRepository.findAll().stream()
+                .filter(booking -> isActiveOnDate(booking, today))
+                .count();
+    }
+
+    public long countActiveForUser(User user) {
+        LocalDate today = LocalDate.now();
+        return bookingRepository.findByUser(user).stream()
+                .filter(booking -> isActiveOnDate(booking, today))
+                .count();
+    }
+
+    private boolean isActiveOnDate(Booking booking, LocalDate date) {
+        if ("CANCELLED".equals(booking.getStatus())) {
+            return false;
+        }
+
+        return !booking.getCheckInDate().isAfter(date)
+                && date.isBefore(booking.getCheckOutDate());
+    }
+
     // ✅ STATS
     public long countAll() {
         return bookingRepository.count();
