@@ -28,8 +28,13 @@ public class BookingService {
     public Booking book(User user, Room room, LocalDate checkIn, LocalDate checkOut) {
 
         // 🔥 VALIDATION (IMPORTANT FIX)
-        if (checkOut.isBefore(checkIn) || checkOut.equals(checkIn)) {
-            throw new RuntimeException("Invalid date range");
+        LocalDate today = LocalDate.now();
+        if (checkIn.isBefore(today)) {
+            throw new RuntimeException("Check-in date cannot be before today");
+        }
+
+        if (!checkIn.isBefore(checkOut)) {
+            throw new RuntimeException("Check-out date must be after check-in date");
         }
 
         if (!"AVAILABLE".equals(room.getStatus())) {
@@ -64,9 +69,13 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
 
-        // 🔥 Prevent double cancel
+        // 🔥 Prevent invalid cancel states
         if ("CANCELLED".equals(booking.getStatus())) {
             throw new RuntimeException("Booking already cancelled");
+        }
+
+        if (!"BOOKED".equals(booking.getStatus())) {
+            throw new RuntimeException("Only unpaid bookings can be cancelled");
         }
 
         booking.setStatus("CANCELLED");

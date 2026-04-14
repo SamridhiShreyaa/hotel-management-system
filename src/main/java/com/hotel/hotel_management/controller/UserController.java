@@ -92,18 +92,45 @@ public class UserController {
                            Authentication auth,
                            RedirectAttributes ra) {
 
-        User user = userService.findByUsername(auth.getName()).orElseThrow();
-        Room room = roomService.findById(roomId).orElseThrow();
+        try {
+            User user = userService.findByUsername(auth.getName()).orElseThrow();
+            Room room = roomService.findById(roomId).orElseThrow();
 
-        var booking = bookingService.book(
-                user,
-                room,
-                java.time.LocalDate.parse(checkIn),
-                java.time.LocalDate.parse(checkOut)
-        );
+            var booking = bookingService.book(
+                    user,
+                    room,
+                    java.time.LocalDate.parse(checkIn),
+                    java.time.LocalDate.parse(checkOut)
+            );
 
-        ra.addFlashAttribute("success", "Booking created. Please complete payment.");
-        return "redirect:/user/pay/" + booking.getId();
+            ra.addFlashAttribute("success", "Booking created. Please complete payment.");
+            return "redirect:/user/pay/" + booking.getId();
+        } catch (RuntimeException e) {
+            ra.addFlashAttribute("error", e.getMessage());
+            return "redirect:/user/book/" + roomId;
+        }
+    }
+
+    @PostMapping("/cancel/{id}")
+    public String cancelBooking(@PathVariable Long id,
+                                Authentication auth,
+                                RedirectAttributes ra) {
+        try {
+            User user = userService.findByUsername(auth.getName()).orElseThrow();
+            Booking booking = bookingService.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+            if (!booking.getUser().getId().equals(user.getId())) {
+                throw new RuntimeException("Unauthorized");
+            }
+
+            bookingService.cancel(id);
+            ra.addFlashAttribute("success", "Booking cancelled successfully.");
+        } catch (RuntimeException e) {
+            ra.addFlashAttribute("error", e.getMessage());
+        }
+
+        return "redirect:/user/my-bookings";
     }
 
     @GetMapping("/pay/{id}")
