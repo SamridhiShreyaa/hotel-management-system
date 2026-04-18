@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+  <a class="navbar-brand fw-bold" href="/">🏨 Grand Hotel</a>
+  <button class="navbar-toggler" type="button"
+          data-bs-toggle="collapse" data-bs-target="#navMenu">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navMenu">
+    <ul class="navbar-nav ms-auto align-items-center gap-2">
+
+      <li class="nav-item" sec:authorize="hasRole('USER')">
+        <a class="nav-link" th:href="@{/user/dashboard}">
+          <i class="bi bi-house"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item" sec:authorize="hasRole('USER')">
+        <a class="nav-link" th:href="@{/user/rooms}">
+          <i class="bi bi-door-open"></i> Rooms
+        </a>
+      </li>
+      <li class="nav-item" sec:authorize="hasRole('USER')">
+        <a class="nav-link" th:href="@{/user/my-bookings}">
+          <i class="bi bi-calendar-check"></i> My Bookings
+        </a>
+      </li>
+
+      <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+        <a class="nav-link" th:href="@{/admin/dashboard}">
+          <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+        <a class="nav-link" th:href="@{/admin/rooms}">
+          <i class="bi bi-building"></i> Rooms
+        </a>
+      </li>
+      <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+        <a class="nav-link" th:href="@{/admin/bookings}">
+          <i class="bi bi-journal-text"></i> Bookings
+        </a>
+      </li>
+      <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+        <a class="nav-link" th:href="@{/admin/guests}">
+          <i class="bi bi-people"></i> Guests
+        </a>
+      </li>
+
+      <li class="nav-item" sec:authorize="isAuthenticated()">
+        <form th:action="@{/logout}" method="post" class="d-inline">
+          <button class="btn btn-outline-danger btn-sm">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </button>
+        </form>
+      </li>
+
+      <li class="nav-item" sec:authorize="!isAuthenticated()">
+        <a class="btn btn-outline-light btn-sm" th:href="@{/signin}">Sign In</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/head :: head('Book Room')}"></head>
+<body>
+
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<div class="container py-4">
+
+  <h2>Book Room</h2>
+
+  <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${error}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <!-- Room Info -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 th:text="${room.roomType}"></h5>
+      <p><strong>Room No:</strong> <span th:text="${room.roomNumber}"></span></p>
+      <p><strong>Price:</strong> ₹<span th:text="${room.pricePerNight}"></span>/night</p>
+      <p><strong>Description:</strong> <span th:text="${room.description}"></span></p>
+    </div>
+  </div>
+
+  <!-- Booking Form -->
+  <form th:action="@{/user/book}" method="post">
+
+    <input type="hidden" name="roomId" th:value="${room.id}" />
+
+    <div class="mb-3">
+      <label>Check-In Date</label>
+      <input type="date" id="checkIn" name="checkIn" class="form-control" required>
+      <small class="text-muted">Past dates are disabled.</small>
+    </div>
+
+    <div class="mb-3">
+      <label>Check-Out Date</label>
+      <input type="date" id="checkOut" name="checkOut" class="form-control" required>
+      <small class="text-muted">Check-out must be at least 1 day after check-in.</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      Confirm Booking
+    </button>
+
+  </form>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  (function () {
+    const checkInInput = document.getElementById('checkIn');
+    const checkOutInput = document.getElementById('checkOut');
+    if (!checkInInput || !checkOutInput) {
+      return;
+    }
+
+    const toInputDate = (date) => {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    };
+
+    const addDays = (dateStr, days) => {
+      const date = new Date(`${dateStr}T00:00:00`);
+      date.setDate(date.getDate() + days);
+      return toInputDate(date);
+    };
+
+    const today = toInputDate(new Date());
+    checkInInput.min = today;
+
+    if (!checkInInput.value || checkInInput.value < today) {
+      checkInInput.value = today;
+    }
+
+    const syncCheckout = () => {
+      const minCheckout = addDays(checkInInput.value, 1);
+      checkOutInput.min = minCheckout;
+
+      if (!checkOutInput.value || checkOutInput.value <= checkInInput.value) {
+        checkOutInput.value = minCheckout;
+      }
+    };
+
+    syncCheckout();
+    checkInInput.addEventListener('change', syncCheckout);
+    checkOutInput.addEventListener('change', function () {
+      if (checkOutInput.value <= checkInInput.value) {
+        checkOutInput.value = addDays(checkInInput.value, 1);
+      }
+    });
+  })();
+</script>
+</body>
+</html>

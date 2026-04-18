@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/head :: head('Sign In')}"></head>
+<body class="auth-page">
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-logo">🏨</div>
+    <h2>Grand Hotel</h2>
+    <p class="auth-sub">Sign in to your account</p>
+
+    <div th:if="${logout}" class="alert alert-success" th:text="${logout}"></div>
+    <div th:if="${param.error}" class="alert alert-danger">Invalid username or password.</div>
+
+    <!--
+      action="/authenticate" → matches .loginProcessingUrl("/authenticate") in SecurityConfig
+      DO NOT change this to /login — that causes an infinite redirect loop
+    -->
+    <form th:action="@{/authenticate}" method="post">
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" name="username" class="form-control"
+               placeholder="Enter username" required autofocus/>
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control"
+               placeholder="Enter password" required/>
+      </div>
+      <button type="submit" class="btn btn-primary w-100 btn-lg">Sign In</button>
+    </form>
+
+    <p class="mt-3 text-center text-muted">
+      No account? <a th:href="@{/register}">Register here</a> to create a custom login.
+    </p>
+    <div class="demo-creds">
+      <strong>Demo credentials:</strong><br/>
+      Admin: <code>admin / admin123</code><br/>
+      Guest: <code>guest / guest123</code><br/>
+      San: <code>san / san</code>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/head :: head('My Bookings')}"></head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<div class="container py-4">
+  <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+    <span th:text="${success}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+    <span th:text="${error}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+
+  <h2 class="mb-4">My Bookings</h2>
+
+  <div th:if="${bookings.isEmpty()}" class="alert alert-info">
+    You have no bookings. <a th:href="@{/user/rooms}">Browse rooms →</a>
+  </div>
+
+  <div class="row g-3" th:unless="${bookings.isEmpty()}">
+    <div class="col-12" th:each="b : ${bookings}">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+            <div>
+              <h6 class="mb-1">
+                Room <strong th:text="${b.room.roomNumber}"></strong>
+                — <span th:text="${b.room.roomType.replace('_',' ')}"></span>
+              </h6>
+              <small class="text-muted">
+                <i class="bi bi-calendar-range"></i>
+                <span th:text="${b.checkInDate}"></span> →
+                <span th:text="${b.checkOutDate}"></span>
+              </small><br/>
+              <small class="text-muted">
+                Booked on: <span th:text="${b.bookingDate}"></span>
+              </small>
+            </div>
+            <div class="text-end">
+              <div class="fs-5 fw-bold">₹<span th:text="${b.totalAmount}"></span></div>
+              <span th:class="'badge ' + (b.status == 'BOOKED' ? 'bg-success' : (b.status == 'CANCELLED' ? 'bg-danger' : 'bg-secondary'))"
+                    th:text="${b.status}"></span>
+            </div>
+          </div>
+          <div class="mt-3 d-flex gap-2" th:if="${b.status == 'BOOKED'}">
+            <a th:href="@{/user/pay/{id}(id=${b.id})}"
+               class="btn btn-sm btn-success">
+              <i class="bi bi-credit-card"></i> Pay Now
+            </a>
+            <form th:action="@{/user/cancel/{id}(id=${b.id})}" method="post"
+                  onsubmit="return confirm('Cancel this booking?')">
+              <button class="btn btn-sm btn-outline-danger">
+                <i class="bi bi-x-circle"></i> Cancel
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
